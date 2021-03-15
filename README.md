@@ -18,7 +18,7 @@
  * Troubleshooting - installing Airflow on Windows 10 (WSL) -  [Medium](https://medium.com/@ryanroline/installing-apache-airflow-on-windows-10-5247aa1249ef)
 
 # Notes about the configuration:
-* Some configuration was left, and need to be solved either in main.py (replacing the env variables) or in .env file (removed in this repository):
+* Some configuration will need to be solved either in main.py (replacing the env variables) or in .env file (removed in this repository):
 
 The main.py code has the following lines that need to be altered:
 ```python
