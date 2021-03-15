@@ -12,12 +12,12 @@
 | Smoke On The Water - Remastered 2012 |	Deep Purple	| 2021-03-14T18:12:20.720Z | 2021-03-14 |
 
 
-#Project reference links:
+# Project reference links:
 * Implementation guided from [Karolina Sowinska's Youtube Channel](https://www.youtube.com/channel/UCAxnMry1lETl47xQWABvH7g)
  * Spotify API - reference page - [Spotify console](https://developer.spotify.com/console/)
  * Troubleshooting - installing Airflow on Windows 10 (WSL) -  [Medium](https://medium.com/@ryanroline/installing-apache-airflow-on-windows-10-5247aa1249ef)
 
-#Notes about the configuration:
+# Notes about the configuration:
 * Some configuration was left, and need to be solved either in main.py (replacing the env variables) or in .env file (removed in this repository):
 
 The main.py code has the following lines that need to be altered:
