@@ -5,7 +5,7 @@
 - Steps on the project: reach the Spotify's "Recent played Tracks endpoint" and download data in JSON format, check if there are any errors before populating into an sqlite table. The table is composed by the following information (my last songs played for reference):
 
 | Song Name      | Artist Name | Played at | Timestamp |
-| ----------- | ----------- | ---: | ---: |
+| ----------- | ----------- | --- | --- |
 | Jump - 2015 Remaster |	Van Halen |	2021-03-14T22:44:49.770Z	| 2021-03-14 | 
 | Sultans Of Swing	| Dire Straits	|2021-03-14T18:20:21.091Z	| 2021-03-14 |
 | Hotel California - 2013 Remaster	| Eagles	| 2021-03-14T18:18:52.381Z	| 2021-03-14 |
