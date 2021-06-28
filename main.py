@@ -8,26 +8,27 @@ from datetime import datetime, timedelta
 from sqlalchemy.orm import sessionmaker
 import os
 
-DATABASE_LOCATION =  os.getenv('DATABASE_LOCATION')
+DATABASE_LOCATION = os.getenv("DATABASE_LOCATION")
 USER_ID = os.getenv("USER_ID")
 TOKEN = os.getenv("TOKEN")
 
+
 def check_data(df: pd.DataFrame) -> bool:
-    #to validate wheter the return is empty
+    # to validate wheter the return is empty
     if df.empty:
         print("INFO: No songs downloaded. Finishing execution")
         return False
-    #validate duplicates
-    if pd.Series(df['played_at']).is_unique:
+    # validate duplicates
+    if pd.Series(df["played_at"]).is_unique:
         pass
     else:
         raise Exception("ERROR: Primary key violation.")
 
-    #check for nulls
+    # check for nulls
     if df.isnull().values.any():
         raise Exception("ERROR: Nulls values found.")
 
-    #Check if there are another dates in the json:
+    # Check if there are another dates in the json:
     # yesterday = datetime.now() - timedelta(days=1)
     # yesterday = yesterday.replace(hour=0, minute=0, second=0, microsecond=0)
     # # print("Yesterday: ", yesterday)
@@ -36,15 +37,16 @@ def check_data(df: pd.DataFrame) -> bool:
     #     if datetime.strptime(timestamp, "%Y-%m-%d") < yesterday:
     #         print('Timestamp:', timestamp)
     #         raise Exception("ERROR: At least one of the returned songs are not from the last 24 hours")
-    
+
     return True
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
 
     headers = {
         "Accept": "application/json",
-        "Content-Type" : "application/json",
-        "Authorization" : "Bearer {token}".format(token=TOKEN)
+        "Content-Type": "application/json",
+        "Authorization": "Bearer {token}".format(token=TOKEN),
     }
 
     today = datetime.now()
@@ -52,7 +54,12 @@ if __name__ == '__main__':
     yesterday_unix_timestamp = int(yesterday.timestamp()) * 1000
 
     # r = requests.get("https://api.spotify.com/v1/me/player/recently-played?after={time}".format(time=yesterday_unix_timestamp), headers=headers)
-    r = requests.get("https://api.spotify.com/v1/me/player/recently-played?after={time}".format(time=yesterday_unix_timestamp), headers=headers)
+    r = requests.get(
+        "https://api.spotify.com/v1/me/player/recently-played?after={time}".format(
+            time=yesterday_unix_timestamp
+        ),
+        headers=headers,
+    )
 
     data = r.json()
 
@@ -62,19 +69,21 @@ if __name__ == '__main__':
     timestamps = []
 
     for song in data["items"]:
-        song_names.append(song['track']['name'])
+        song_names.append(song["track"]["name"])
         artist_names.append(song["track"]["album"]["artists"][0]["name"])
-        played_at_list.append(song['played_at'])
-        timestamps.append(song['played_at'][0:10])
+        played_at_list.append(song["played_at"])
+        timestamps.append(song["played_at"][0:10])
 
     song_dict = {
-        "song_name" : song_names,
-        "artist_name" : artist_names,
-        "played_at" : played_at_list,
-        "timestamp" : timestamps
-     }
+        "song_name": song_names,
+        "artist_name": artist_names,
+        "played_at": played_at_list,
+        "timestamp": timestamps,
+    }
 
-    song_df = pd.DataFrame(song_dict, columns = ["song_name", "artist_name","played_at", "timestamp"])
+    song_df = pd.DataFrame(
+        song_dict, columns=["song_name", "artist_name", "played_at", "timestamp"]
+    )
 
     if check_data(song_df):
         print("INFO: Downloaded data is valid, proceed to the Load steps")
@@ -96,9 +105,9 @@ if __name__ == '__main__':
     print("INFO: Opened database succesfully.")
 
     try:
-        song_df.to_sql("my_tracks", database_engine, index=False, if_exists='append')
+        song_df.to_sql("my_tracks", database_engine, index=False, if_exists="append")
     except:
         print("INFO: Data already exists in the database.")
-    
+
     conn.close()
     print("INFO: Close database successfully.")
